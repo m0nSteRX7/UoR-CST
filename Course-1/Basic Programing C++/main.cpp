@@ -1,0 +1,63 @@
+/*
+Да се създаде структура съхраняваща данните на един компютър - марка, година на производство, 
+тегло и инвентарен номер. За група от компютри да се създаде масив, всяка една от клетките на 
+масива да съдържа по един запис, съхраняваща данните на един компютър. Данните за всеки 
+компютър да се прочетат от клавиатурата и да се запишат в масива. След това, да се създаде файл 
+и в него да се запишат само компютрите, по-стари от 10 години.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+// Структура, представляваща компютър
+struct Computer {
+    char brand[50];
+    int year;
+    float weight;
+    int inventoryNumber;
+};
+
+int main() {
+    int n;
+
+    // Използваме fscanf за да прочетем броя на компютрите от потребителя
+    printf("Въведете брой компютри: ");
+    scanf("%d", &n);
+
+    // Декларираме масив от структури Computer
+    struct Computer computers[n];
+
+    // Въвеждане на данни за компютрите
+    for (int i = 0; i < n; i++) {
+        printf("\nВъведете данни за компютър #%d:\n", i + 1);
+        printf("Марка: ");
+        scanf("%s", computers[i].brand);
+        printf("Година на производство: ");
+        scanf("%d", &computers[i].year);
+        printf("Тегло: ");
+        scanf("%f", &computers[i].weight);
+        printf("Инвентарен номер: ");
+        scanf("%d", &computers[i].inventoryNumber);
+    }
+
+    // Създаване на файл за запис на компютрите, по-стари от 10 години
+    FILE *file = fopen("oldpc.txt", "w");
+    if (file == NULL) {
+        printf("Грешка при създаване на файла.\n");
+        exit(1);
+    }
+
+    // Запис на компютрите, по-стари от 10 години, във файла
+    for (int i = 0; i < n; i++) {
+        if (2023 - computers[i].year > 10) {
+            fprintf(file, "Марка: %s\nГодина: %d\nТегло: %.2f\nИнвентарен номер: %d\n\n",
+                    computers[i].brand, computers[i].year, computers[i].weight, computers[i].inventoryNumber);
+        }
+    }
+
+    fclose(file);
+    printf("\nДанните за старите компютри са записани във файл 'oldpc.txt'.\n");
+
+    return 0;
+}
